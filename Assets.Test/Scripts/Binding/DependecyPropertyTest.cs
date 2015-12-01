@@ -184,8 +184,6 @@ namespace Assets.Test.Scripts.Binding
                 null,
                 value =>
                 {
-                    Assert.IsFalse(called);
-                    Assert.AreEqual(oldValue, value);
                     called = true;
                     return coercevalue;
                 });
