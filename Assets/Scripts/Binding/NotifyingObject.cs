@@ -3,16 +3,16 @@ using JetBrains.Annotations;
 
 namespace Assets.Scripts.Binding
 {
-    public class NotifingObject<T> : INotifingObject<T>
+    public class NotifyingObject<T> : INotifyingObject<T>
     {
         private T _value;
 
-        public NotifingObject()
+        public NotifyingObject()
             : this(default(T))
         {
         }
 
-        public NotifingObject([CanBeNull] T value)
+        public NotifyingObject([CanBeNull] T value)
         {
             _value = value;
         } 

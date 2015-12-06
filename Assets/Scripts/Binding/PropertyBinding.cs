@@ -4,16 +4,16 @@ using System.Globalization;
 
 namespace Assets.Scripts.Binding
 {
-    public class PropertyBinding<TSource, TTarget> : IDisposable
+    public class PropertyBinding<TSource, TTarget> : IBinding
     {
-        private readonly IDependecyProperty<TTarget> _target;
-        private readonly INotifingObject<TSource> _source;
+        private readonly IDependencyProperty<TTarget> _target;
+        private readonly INotifyingObject<TSource> _source;
         private readonly ValueConverter<TSource, TTarget> _converter; 
 
         public PropertyBinding(
             BindingType bindingType,
-            [NotNull] IDependecyProperty<TTarget> target,
-            [NotNull] INotifingObject<TSource> source,
+            [NotNull] IDependencyProperty<TTarget> target,
+            [NotNull] INotifyingObject<TSource> source,
             [NotNull] ValueConverter<TSource,TTarget> converter)
         {
             if (target == null)
@@ -72,10 +72,20 @@ namespace Assets.Scripts.Binding
             }
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void UnsubscribeEventHandlers()
         {
             _source.PropertyChanged -= SourceOnPropertyChanged;
             _target.PropertyChanged -= TargetOnPropertyChanged;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            UnsubscribeEventHandlers();
+        }
+
+        public void Close()
+        {
+            UnsubscribeEventHandlers();
         }
 
         public void Dispose()

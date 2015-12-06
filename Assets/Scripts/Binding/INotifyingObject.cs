@@ -2,11 +2,10 @@
 
 namespace Assets.Scripts.Binding
 {
-    public interface IDependecyProperty<T>
+    public interface INotifyingObject<T>
     {
         event EventHandler<PropertyChangedEventArgs<T>> PropertyChanged;
-
-        T GetValue();
         void SetValue(T value);
+        T GetValue();
     }
 }

@@ -10,15 +10,15 @@ namespace Assets.Test.Scripts.Binding
     class PropertyBindingTest
     {
 
-        private Mock<INotifingObject<int>> _notifingObjectMock;
-        private Mock<IDependecyProperty<float>> _dependencyPropertyMock;
+        private Mock<INotifyingObject<int>> _notifyingObjectMock;
+        private Mock<IDependencyProperty<float>> _dependencyPropertyMock;
         private Mock<ValueConverter<int, float>> _converterMock;
 
         [SetUp]
         public void SetUp()
         {
-            _notifingObjectMock = new Mock<INotifingObject<int>>();
-            _dependencyPropertyMock = new Mock<IDependecyProperty<float>>();
+            _notifyingObjectMock = new Mock<INotifyingObject<int>>();
+            _dependencyPropertyMock = new Mock<IDependencyProperty<float>>();
             _converterMock = new Mock<ValueConverter<int, float>>();
         }
 
@@ -29,24 +29,24 @@ namespace Assets.Test.Scripts.Binding
             Assert.Throws<NotSupportedException>(() => new PropertyBinding<int, float>(
                 (BindingType)int.MaxValue,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object));
         }
 
         [Test]
-        public void Ctor_DepedencPropertyNull_Throws()
+        public void Ctor_DependencyPropertyNull_Throws()
         {
             // ReSharper disable once ObjectCreationAsStatement
             // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Throws<ArgumentNullException>(() => new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 null,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object));
         }
 
         [Test]
-        public void Ctor_NotifingObjectNull_Throws()
+        public void Ctor_NotifyingObjectNull_Throws()
         {
             // ReSharper disable once ObjectCreationAsStatement
             // ReSharper disable once AssignNullToNotNullAttribute
@@ -65,7 +65,7 @@ namespace Assets.Test.Scripts.Binding
             Assert.Throws<ArgumentNullException>(() => new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 null));
         }
 
@@ -81,10 +81,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
             _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Once());
@@ -102,10 +102,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
             _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Never());
@@ -122,11 +122,11 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.OneWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
             }
 
             _converterMock.Verify(mock => mock.CanConvert(source, culture), Times.Once());
@@ -144,11 +144,11 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.OneWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
             }
 
             _converterMock.Verify(mock => mock.Convert(source, culture), Times.Once());
@@ -163,10 +163,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 34));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 34));
             }
 
             _converterMock.Verify(mock => mock.Convert(It.IsAny<int>(), It.IsAny<CultureInfo>()), Times.Never());
@@ -184,10 +184,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
             _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Once());
@@ -205,10 +205,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
             _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Never());
@@ -225,11 +225,11 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
             }
 
             _converterMock.Verify(mock => mock.CanConvert(source, culture), Times.Once());
@@ -247,11 +247,11 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, source));
             }
 
             _converterMock.Verify(mock => mock.Convert(source, culture), Times.Once());
@@ -266,10 +266,10 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
-                _notifingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 34));
+                _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 34));
             }
 
             _converterMock.Verify(mock => mock.Convert(It.IsAny<int>(), It.IsAny<CultureInfo>()), Times.Never());
@@ -287,13 +287,13 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
         }
 
         [Test]
@@ -308,13 +308,13 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifingObjectMock.Verify(mock => mock.SetValue(converted), Times.Never());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Never());
         }
 
         [Test]
@@ -328,7 +328,7 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
@@ -350,7 +350,7 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
@@ -369,7 +369,7 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.TwoWay,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
@@ -390,13 +390,13 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWayToSource,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
         }
 
         [Test]
@@ -411,13 +411,13 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWayToSource,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifingObjectMock.Verify(mock => mock.SetValue(converted), Times.Never());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Never());
         }
 
         [Test]
@@ -431,7 +431,7 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.OneWayToSource,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
@@ -453,7 +453,7 @@ namespace Assets.Test.Scripts.Binding
             using (var subject = new PropertyBinding<int, float>(
                 BindingType.OneWayToSource,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 subject.Culture = culture;
@@ -464,7 +464,7 @@ namespace Assets.Test.Scripts.Binding
         }
 
         [Test]
-        public void Ctor_OneWayToSourceyBindingAndCanNotConvertBack_ConvertBackNotCalled()
+        public void Ctor_OneWayToSourceBindingAndCanNotConvertBack_ConvertBackNotCalled()
         {
             _converterMock.Setup(mock => mock.CanConvertBack(It.IsAny<float>(), It.IsAny<CultureInfo>())).Returns(false);
             _converterMock.Setup(mock => mock.ConvertBack(It.IsAny<float>(), It.IsAny<CultureInfo>()));
@@ -472,7 +472,7 @@ namespace Assets.Test.Scripts.Binding
             using (new PropertyBinding<int, float>(
                 BindingType.OneWayToSource,
                 _dependencyPropertyMock.Object,
-                _notifingObjectMock.Object,
+                _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
@@ -480,5 +480,62 @@ namespace Assets.Test.Scripts.Binding
 
             _converterMock.Verify(mock => mock.ConvertBack(It.IsAny<float>(), It.IsAny<CultureInfo>()), Times.Never());
         }
+
+        [Test]
+        public void Dispose_MultipleCalls_DoesNotThrow()
+        {
+            var subject = new PropertyBinding<int, float>(
+                BindingType.OneWayToSource,
+                _dependencyPropertyMock.Object,
+                _notifyingObjectMock.Object,
+                _converterMock.Object);
+            subject.Dispose();
+            Assert.DoesNotThrow(() => subject.Dispose());
+        }
+
+        [Test]
+        public void Dispose_SourceUpdated_TargetNotUpdated()
+        {
+            _converterMock.Setup(mock => mock.CanConvert(It.IsAny<int>(), It.IsAny<CultureInfo>()));
+            var subject = new PropertyBinding<int, float>(
+                BindingType.OneWayToSource,
+                _dependencyPropertyMock.Object,
+                _notifyingObjectMock.Object,
+                _converterMock.Object);
+
+            subject.Dispose();
+            _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 1));
+
+            _converterMock.Verify(mock => mock.CanConvert(It.IsAny<int>(), It.IsAny<CultureInfo>()), Times.Never);
+        }
+
+        [Test]
+        public void Close_MultipleCalls_DoesNotThrow()
+        {
+            var subject = new PropertyBinding<int, float>(
+                BindingType.OneWayToSource,
+                _dependencyPropertyMock.Object,
+                _notifyingObjectMock.Object,
+                _converterMock.Object);
+            subject.Close();
+            Assert.DoesNotThrow(() => subject.Close());
+        }
+
+        [Test]
+        public void Close_SourceUpdated_TargetNotUpdated()
+        {
+            _converterMock.Setup(mock => mock.CanConvert(It.IsAny<int>(), It.IsAny<CultureInfo>()));
+            var subject = new PropertyBinding<int, float>(
+                BindingType.OneWayToSource,
+                _dependencyPropertyMock.Object,
+                _notifyingObjectMock.Object,
+                _converterMock.Object);
+
+            subject.Close();
+            _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 1));
+
+            _converterMock.Verify(mock => mock.CanConvert(It.IsAny<int>(), It.IsAny<CultureInfo>()), Times.Never);
+        }
+
     }
 }
