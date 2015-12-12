@@ -15,7 +15,13 @@ namespace Assets.Scripts.Binding
         public NotifyingObject([CanBeNull] T value)
         {
             _value = value;
-        } 
+        }
+
+        public T Value
+        {
+            get { return GetValue(); }
+            set { SetValue(value); }
+        }
 
         public event EventHandler<PropertyChangedEventArgs<T>> PropertyChanged;
 
