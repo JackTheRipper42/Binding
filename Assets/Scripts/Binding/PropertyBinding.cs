@@ -37,13 +37,17 @@ namespace Assets.Scripts.Binding
             {
                 case BindingType.OneWay:
                     _source.PropertyChanged += SourceOnPropertyChanged;
+                    SetTarget(_source.GetValue());
                     break;
                 case BindingType.TwoWay:
                     _source.PropertyChanged += SourceOnPropertyChanged;
                     _target.PropertyChanged += TargetOnPropertyChanged;
+                    SetTarget(_source.GetValue());
+                    SetSource(_target.GetValue());
                     break;
                 case BindingType.OneWayToSource:
                     _target.PropertyChanged += TargetOnPropertyChanged;
+                    SetSource(_target.GetValue());
                     break;
                 default:
                     throw new NotSupportedException(string.Format(
@@ -56,18 +60,28 @@ namespace Assets.Scripts.Binding
 
         private void SourceOnPropertyChanged(object sender, PropertyChangedEventArgs<TSource> args)
         {
-            if (_converter.CanConvert(args.NewValue, Culture))
-            {
-                var converted = _converter.Convert(args.NewValue, Culture);
-                _target.SetValue(converted);
-            }
+            SetTarget(args.NewValue);
         }
 
         private void TargetOnPropertyChanged(object sender, PropertyChangedEventArgs<TTarget> args)
         {
-            if (_converter.CanConvertBack(args.NewValue, Culture))
+            SetSource(args.NewValue);
+        }
+
+        private void SetTarget(TSource value)
+        {
+            if (_converter.CanConvert(value, Culture))
             {
-                var converted = _converter.ConvertBack(args.NewValue, Culture);
+                var converted = _converter.Convert(value, Culture);
+                _target.SetValue(converted);
+            }
+        }
+
+        private void SetSource(TTarget value)
+        {
+            if (_converter.CanConvertBack(value, Culture))
+            {
+                var converted = _converter.ConvertBack(value, Culture);
                 _source.SetValue(converted);
             }
         }

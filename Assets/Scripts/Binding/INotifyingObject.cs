@@ -7,6 +7,5 @@ namespace Assets.Scripts.Binding
         event EventHandler<PropertyChangedEventArgs<T>> PropertyChanged;
         void SetValue(T value);
         T GetValue();
-        T Value { get; set; }
     }
 }

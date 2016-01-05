@@ -84,10 +84,12 @@ namespace Assets.Test.Scripts.Binding
                 _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
+                _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Exactly(1));
+
                 _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
-            _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Exactly(2));
         }
 
         [Test]
@@ -187,10 +189,12 @@ namespace Assets.Test.Scripts.Binding
                 _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
+                _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Exactly(1));
+
                 _notifyingObjectMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<int>(0, 13));
             }
 
-            _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _dependencyPropertyMock.Verify(mock => mock.SetValue(converted), Times.Exactly(2));
         }
 
         [Test]
@@ -290,10 +294,12 @@ namespace Assets.Test.Scripts.Binding
                 _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
+                _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Exactly(1));
+
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Exactly(2));
         }
 
         [Test]
@@ -393,10 +399,12 @@ namespace Assets.Test.Scripts.Binding
                 _notifyingObjectMock.Object,
                 _converterMock.Object))
             {
+                _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Exactly(1));
+
                 _dependencyPropertyMock.Raise(mock => mock.PropertyChanged += null, new PropertyChangedEventArgs<float>(0, 34f));
             }
 
-            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Once());
+            _notifyingObjectMock.Verify(mock => mock.SetValue(converted), Times.Exactly(2));
         }
 
         [Test]

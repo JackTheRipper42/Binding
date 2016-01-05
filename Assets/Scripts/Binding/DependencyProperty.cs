@@ -54,6 +54,8 @@ namespace Assets.Scripts.Binding
             }
         }
 
+        public bool Bound { get { return _binding != null; } }
+
         public void SetValue(T value)
         {
             if (Equals(value, _value))
@@ -78,7 +80,7 @@ namespace Assets.Scripts.Binding
             {
                 throw new ArgumentNullException("source");
             }
-            if (_binding != null)
+            if (Bound)
             {
                 throw new InvalidOperationException(AlreadyBoundMessage);
             }
@@ -100,7 +102,7 @@ namespace Assets.Scripts.Binding
             {
                 throw new ArgumentNullException("converter");
             }
-            if (_binding != null)
+            if (Bound)
             {
                 throw new InvalidOperationException(AlreadyBoundMessage);
             }
@@ -119,7 +121,7 @@ namespace Assets.Scripts.Binding
             {
                 throw new ArgumentNullException("converter");
             }
-            if (_binding != null)
+            if (Bound)
             {
                 throw new InvalidOperationException(AlreadyBoundMessage);
             }
@@ -138,7 +140,7 @@ namespace Assets.Scripts.Binding
             {
                 throw new ArgumentNullException("converter");
             }
-            if (_binding != null)
+            if (Bound)
             {
                 throw new InvalidOperationException(AlreadyBoundMessage);
             }
@@ -153,6 +155,7 @@ namespace Assets.Scripts.Binding
             {
                 _binding.Close();
                 _binding = null;
+                SetValue(default(T));
             }
         }
 

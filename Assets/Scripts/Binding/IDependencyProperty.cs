@@ -32,5 +32,7 @@ namespace Assets.Scripts.Binding
         void ClearBinding();
 
         CultureInfo Culture { get; set; }
+
+        bool Bound { get; }
     }
 }
