@@ -26,6 +26,11 @@ namespace Assets.Scripts.Binding
             _canExecute = canExecute;
         }
 
+        public DelegateCommand([NotNull] Action execute)
+            : this(execute, () => true)
+        {
+        }
+
         public void Execute()
         {
             _execute();
