@@ -13,7 +13,6 @@ namespace Assets.Scripts.CooldownButtonTest
         [SerializeField] private Color _buttonEnabledProgressBarColor;
         [SerializeField] private Color _buttonDisabledProgressBarColor;
 
-
         private readonly NotifyingObject<Color> _buttonEnabledColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonDisabledColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonEnabledTextColorProperty = new NotifyingObject<Color>();
@@ -57,60 +56,24 @@ namespace Assets.Scripts.CooldownButtonTest
             get { return _buttonDisabledProgressBarColorProperty; }
         }
 
-        public Color ButtonEnabledColor
-        {
-            get { return ButtonEnabledColorProperty.GetValue(); }
-            set { ButtonEnabledColorProperty.SetValue(value); }
-        }
-
-        public Color ButtonDisabledColor
-        {
-            get { return ButtonDisabledColorProperty.GetValue(); }
-            set { ButtonDisabledColorProperty.SetValue(value); }
-        }
-
-        public Color ButtonEnabledTextColor
-        {
-            get { return ButtonEnabledTextColorProperty.GetValue(); }
-            set { ButtonEnabledTextColorProperty.SetValue(value); }
-        }
-
-        public Color ButtonDisabledTextColor
-        {
-            get { return ButtonDisabledTextColorProperty.GetValue(); }
-            set { ButtonDisabledTextColorProperty.SetValue(value); }
-        }
-
-        public Color ButtonEnabledProgressBarColor
-        {
-            get { return ButtonEnabledProgressBarColorProperty.GetValue(); }
-            set { ButtonEnabledProgressBarColorProperty.SetValue(value); }
-        }
-
-        public Color ButtonDisabledProgressBarColor
-        {
-            get { return ButtonDisabledProgressBarColorProperty.GetValue(); }
-            set { ButtonDisabledProgressBarColorProperty.SetValue(value); }
-        }
-
         public void OnBeforeSerialize()
         {
-            _buttonEnabledColor = ButtonEnabledColor;
-            _buttonDisabledColor = ButtonDisabledColor;
-            _buttonEnabledTextColor = ButtonEnabledTextColor;
-            _buttonDisabledTextColor = ButtonDisabledTextColor;
-            _buttonEnabledProgressBarColor = ButtonEnabledProgressBarColor;
-            _buttonDisabledProgressBarColor = ButtonDisabledProgressBarColor;
+            _buttonEnabledColor = ButtonEnabledColorProperty.GetValue();
+            _buttonDisabledColor = ButtonDisabledColorProperty.GetValue();
+            _buttonEnabledTextColor = ButtonEnabledTextColorProperty.GetValue();
+            _buttonDisabledTextColor = ButtonDisabledTextColorProperty.GetValue();
+            _buttonEnabledProgressBarColor = ButtonEnabledProgressBarColorProperty.GetValue();
+            _buttonDisabledProgressBarColor = ButtonDisabledProgressBarColorProperty.GetValue();
         }
 
         public void OnAfterDeserialize()
         {
-            ButtonEnabledColor = _buttonEnabledColor;
-            ButtonDisabledColor = _buttonDisabledColor;
-            ButtonEnabledTextColor = _buttonEnabledTextColor;
-            ButtonDisabledTextColor = _buttonDisabledTextColor;
-            ButtonEnabledProgressBarColor = _buttonEnabledProgressBarColor;
-            ButtonDisabledProgressBarColor = _buttonDisabledProgressBarColor;
+            ButtonEnabledColorProperty.SetValue(_buttonEnabledColor);
+            ButtonDisabledColorProperty.SetValue(_buttonDisabledColor);
+            ButtonEnabledTextColorProperty.SetValue(_buttonEnabledTextColor);
+            ButtonDisabledTextColorProperty.SetValue(_buttonDisabledTextColor);
+            ButtonEnabledProgressBarColorProperty.SetValue(_buttonEnabledProgressBarColor);
+            ButtonDisabledProgressBarColorProperty.SetValue(_buttonDisabledProgressBarColor);
         }
     }
 }
