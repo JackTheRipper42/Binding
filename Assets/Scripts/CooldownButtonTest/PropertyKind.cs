@@ -1,7 +1,8 @@
 namespace Assets.Scripts.CooldownButtonTest
 {
-    public enum PropertyType
+    public enum PropertyKind
     {
+        Undefined,
         Tag,
         Layer,
         Passwort

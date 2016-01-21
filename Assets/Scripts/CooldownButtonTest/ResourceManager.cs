@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Binding;
+﻿using System.ComponentModel;
+using Assets.Scripts.Binding;
 using UnityEngine;
 
 namespace Assets.Scripts.CooldownButtonTest
@@ -12,12 +13,49 @@ namespace Assets.Scripts.CooldownButtonTest
         [SerializeField] private Color _buttonEnabledProgressBarColor;
         [SerializeField] private Color _buttonDisabledProgressBarColor;
 
-        public readonly NotifyingObject<Color> ButtonEnabledColorProperty = new NotifyingObject<Color>();
-        public readonly NotifyingObject<Color> ButtonDisabledColorProperty = new NotifyingObject<Color>();
-        public readonly NotifyingObject<Color> ButtonEnabledTextColorProperty = new NotifyingObject<Color>();
-        public readonly NotifyingObject<Color> ButtonDisabledTextColorProperty = new NotifyingObject<Color>();
-        public readonly NotifyingObject<Color> ButtonEnabledProgressBarColorProperty = new NotifyingObject<Color>();
-        public readonly NotifyingObject<Color> ButtonDisabledProgressBarColorProperty = new NotifyingObject<Color>();
+
+        private readonly NotifyingObject<Color> _buttonEnabledColorProperty = new NotifyingObject<Color>();
+        private readonly NotifyingObject<Color> _buttonDisabledColorProperty = new NotifyingObject<Color>();
+        private readonly NotifyingObject<Color> _buttonEnabledTextColorProperty = new NotifyingObject<Color>();
+        private readonly NotifyingObject<Color> _buttonDisabledTextColorProperty = new NotifyingObject<Color>();
+        private readonly NotifyingObject<Color> _buttonEnabledProgressBarColorProperty = new NotifyingObject<Color>();
+        private readonly NotifyingObject<Color> _buttonDisabledProgressBarColorProperty = new NotifyingObject<Color>();
+
+        [DisplayName("button enabled color")]
+        public NotifyingObject<Color> ButtonEnabledColorProperty
+        {
+            get { return _buttonEnabledColorProperty; }
+        }
+
+        [DisplayName("button disabled color")]
+        public NotifyingObject<Color> ButtonDisabledColorProperty
+        {
+            get { return _buttonDisabledColorProperty; }
+        }
+
+        [DisplayName("button enabled text color")]
+        public NotifyingObject<Color> ButtonEnabledTextColorProperty
+        {
+            get { return _buttonEnabledTextColorProperty; }
+        }
+
+        [DisplayName("button disabled color")]
+        public NotifyingObject<Color> ButtonDisabledTextColorProperty
+        {
+            get { return _buttonDisabledTextColorProperty; }
+        }
+
+        [DisplayName("button enabled progress bar color")]
+        public NotifyingObject<Color> ButtonEnabledProgressBarColorProperty
+        {
+            get { return _buttonEnabledProgressBarColorProperty; }
+        }
+
+        [DisplayName("button disabled progress bar color")]
+        public NotifyingObject<Color> ButtonDisabledProgressBarColorProperty
+        {
+            get { return _buttonDisabledProgressBarColorProperty; }
+        }
 
         public Color ButtonEnabledColor
         {

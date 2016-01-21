@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Assets.Scripts.Binding;
+using System;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -10,194 +10,165 @@ namespace Assets.Scripts.CooldownButtonTest
     [CustomEditor(typeof(ResourceManager))]
     public class ResourceManagerEditor : Editor
     {
-        private const float FieldWidth = 400f;
-        private const float LabelWidth = 120f;
-
-        private readonly GUILayoutOption _layelWidth = GUILayout.Width(LabelWidth);
-        private readonly GUILayoutOption _fieldMaxWidth = GUILayout.MaxWidth(FieldWidth);
-
-        private ResourceManager _resourceManager;
-        private PropertyInfo[] _properties;
+        private NotifyingObjectProperty[] _properties;
 
         public override void OnInspectorGUI()
         {
             foreach (var property in _properties)
             {
-                var propertyType = property.PropertyType;
-                var propertyAttribute = property.GetCustomAttributes(typeof(PropertyTypeAttribute), false)
-                    .Cast<PropertyTypeAttribute>()
-                    .SingleOrDefault();
-                var displayNameAttribute = property.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-                    .Cast<DisplayNameAttribute>()
-                    .SingleOrDefault();
+                var propertyType = property.Type;
 
-                var name = displayNameAttribute != null
-                    ? displayNameAttribute.DisplayName
-                    : property.Name;
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(new GUIContent(property.DisplayName, property.description));
+                GUILayout.FlexibleSpace();
 
-                if (propertyAttribute != null)
+                switch (property.PropertyKind)
                 {
-                    switch (propertyAttribute.PropertyType)
-                    {
-                        case PropertyType.Tag:
-                            AddProperty(
-                                name,
-                                property,
-                                () => EditorGUILayout.TagField(GetValue<string>(property), _fieldMaxWidth));
-                            break;
-                        case PropertyType.Layer:
-                            AddProperty(
-                                name,
-                                property,
-                                () => EditorGUILayout.LayerField(GetValue<int>(property), _fieldMaxWidth));
-                            break;
-                        case PropertyType.Passwort:
-                            AddProperty(
-                                name,
-                                property,
-                                () => EditorGUILayout.PasswordField(GetValue<string>(property), _fieldMaxWidth));
-                            break;
-                        default:
-                            throw new NotSupportedException(string.Format(
-                                "The type '{0}' is not supported.",
-                                propertyAttribute.PropertyType));
-                    }
+                    case PropertyKind.Undefined:
+                        if (propertyType == typeof(Color))
+                        {
+                            property.SetValue(EditorGUILayout.ColorField(property.GetValue<Color>()));
+                        }
+                        else if (propertyType == typeof(float))
+                        {
+                            property.SetValue(
+                                EditorGUILayout.DelayedFloatField(
+                                    property.GetValue<float>()));
+                        }
+                        else if (propertyType == typeof(string))
+                        {
+                            property.SetValue(
+                                EditorGUILayout.DelayedTextField(
+                                    property.GetValue<string>()));
+                        }
+                        else if (propertyType == typeof(int))
+                        {
+                            property.SetValue(EditorGUILayout.DelayedIntField(property.GetValue<int>()));
+                        }
+                        else if (propertyType == typeof(long))
+                        {
+                            property.SetValue(EditorGUILayout.LongField(property.GetValue<long>()));
+                        }
+                        else if (propertyType == typeof(double))
+                        {
+                            property.SetValue(EditorGUILayout.DoubleField(property.GetValue<double>()));
+                        }
+                        else if (propertyType == typeof(bool))
+                        {
+                            property.SetValue(EditorGUILayout.Toggle(
+                                GUIContent.none,
+                                property.GetValue<bool>()));
+                        }
+                        else if (propertyType == typeof(Vector2))
+                        {
+                            property.SetValue(EditorGUILayout.Vector2Field(GUIContent.none, property.GetValue<Vector2>()));
+                        }
+                        else if (propertyType == typeof(Vector3))
+                        {
+                            property.SetValue(EditorGUILayout.Vector3Field(
+                                GUIContent.none,
+                                property.GetValue<Vector3>()));
+                        }
+                        else if (propertyType == typeof(Bounds))
+                        {
+                            property.SetValue(EditorGUILayout.BoundsField(property.GetValue<Bounds>()));
+                        }
+                        else if (propertyType == typeof(Rect))
+                        {
+                            property.SetValue(EditorGUILayout.RectField(property.GetValue<Rect>()));
+                        }
+                        else if (propertyType.IsEnum)
+                        {
+                            property.SetValue(EditorGUILayout.EnumMaskField(property.GetValue<Enum>()));
+                        }
+                        else if (typeof(UnityEngine.Object).IsAssignableFrom(propertyType))
+                        {
+                            property.SetValue(EditorGUILayout.ObjectField(
+                                property.GetValue<UnityEngine.Object>(),
+                                propertyType,
+                                true));
+                        }
+                        break;
+                    case PropertyKind.Tag:
+                        property.SetValue(EditorGUILayout.TagField(property.GetValue<string>()));
+                        break;
+                    case PropertyKind.Layer:
+                        property.SetValue(EditorGUILayout.LayerField(property.GetValue<int>()));
+                        break;
+                    case PropertyKind.Passwort:
+                        property.SetValue(EditorGUILayout.PasswordField(property.GetValue<string>()));
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
-                else if (propertyType == typeof(Color))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.ColorField(GetValue<Color>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(float))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.DelayedFloatField(GetValue<float>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(string))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.DelayedTextField(GetValue<string>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(int))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.DelayedIntField(GetValue<int>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(long))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.LongField(GetValue<long>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(double))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.DoubleField(GetValue<double>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(bool))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.Toggle(GUIContent.none, GetValue<bool>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(Vector2))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.Vector2Field(GUIContent.none, GetValue<Vector2>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(Vector3))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.Vector3Field(GUIContent.none, GetValue<Vector3>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(Bounds))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.BoundsField(GetValue<Bounds>(property), _fieldMaxWidth));
-                }
-                else if (propertyType == typeof(Rect))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.RectField(GetValue<Rect>(property), _fieldMaxWidth));
-                }
-                else if (propertyType.IsEnum)
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.EnumMaskField(GetValue<Enum>(property), _fieldMaxWidth));
-                }
-                else if (typeof(UnityEngine.Object).IsAssignableFrom(propertyType))
-                {
-                    AddProperty(
-                        name,
-                        property,
-                        () => EditorGUILayout.ObjectField(
-                            GetValue<UnityEngine.Object>(property),
-                            propertyType,
-                            true,
-                            _fieldMaxWidth));
-                }
+
+                GUILayout.EndHorizontal();
             }
         }
 
         public void OnEnable()
         {
-            _resourceManager = (ResourceManager) target;
+            var resourceManager = (ResourceManager) target;
             _properties =
                 typeof(ResourceManager).GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(SelectProperty)
+                    .Where(IsNotifyingObject)
+                    .Select(property => SelectNotifyingObjectProperty(property, resourceManager))
+                    .Where(IsSupported)
                     .ToArray();
         }
 
-        private static bool SelectProperty(PropertyInfo property)
+        private static bool IsNotifyingObject(PropertyInfo property)
         {
             var getter = property.GetGetMethod();
-            var setter = property.GetSetMethod();
-            if (getter == null || setter == null)
+            if (getter == null || !getter.IsPublic)
             {
                 return false;
             }
-            return getter.IsPublic && setter.IsPublic;
+
+            var type = property.PropertyType;
+            if (!type.IsGenericType)
+            {
+                return false;
+            }
+
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
+
+            return genericTypeDefinition == typeof(NotifyingObject<>);
         }
 
-        private void AddProperty<T>(string name, PropertyInfo property, Func<T> fieldFunc)
+        private static bool IsSupported(NotifyingObjectProperty property)
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(property.Name, _layelWidth);
-            var value = fieldFunc();
-            SetValue(property, value);
-            GUILayout.EndHorizontal();
+            var propertyType = property.Type;
+            switch (property.PropertyKind)
+            {
+                case PropertyKind.Undefined:
+                    return propertyType == typeof(Color) ||
+                           propertyType == typeof(float) ||
+                           propertyType == typeof(string) ||
+                           propertyType == typeof(int) ||
+                           propertyType == typeof(long) ||
+                           propertyType == typeof(double) ||
+                           propertyType == typeof(bool) ||
+                           propertyType == typeof(Vector2) ||
+                           propertyType == typeof(Vector3) ||
+                           propertyType == typeof(Bounds) ||
+                           propertyType == typeof(Rect) ||
+                           propertyType.IsEnum ||
+                           typeof(UnityEngine.Object).IsAssignableFrom(propertyType);
+                case PropertyKind.Tag:
+                    return propertyType == typeof(string);
+                case PropertyKind.Layer:
+                    return propertyType == typeof(int);
+                case PropertyKind.Passwort:
+                    return propertyType == typeof(string);
+                default:
+                    return false;
+            }
         }
 
-        private void SetValue<T>(PropertyInfo property, T value)
+        private static NotifyingObjectProperty SelectNotifyingObjectProperty(PropertyInfo property, object obj)
         {
-            property.SetValue(_resourceManager, value, null);
-        }
-
-        private T GetValue<T>(PropertyInfo property)
-        {
-            return (T) property.GetValue(_resourceManager, null);
+            return new NotifyingObjectProperty(property, obj);
         }
     }
 }
