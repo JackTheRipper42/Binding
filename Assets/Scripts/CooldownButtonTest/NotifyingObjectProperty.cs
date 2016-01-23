@@ -7,20 +7,25 @@ namespace Assets.Scripts.CooldownButtonTest
 {
     public class NotifyingObjectProperty
     {
+        private const string GetValueMethodName = "GetValue";
+        private const string SetValueMethodName = "SetValue";
+        private const string DefaultCategory = "Misc";
+
         private readonly Type _type;
         private readonly MethodInfo _getter;
         private readonly MethodInfo _setter;
         private readonly object _notifyingObject;
         private readonly string _displayName;
         private readonly string _description;
+        private readonly string _category;
         private readonly PropertyKind _propertyKind;
 
         public NotifyingObjectProperty(PropertyInfo property, object obj)
         {
             _type = property.PropertyType.GetGenericArguments()[0];
             _notifyingObject = property.GetValue(obj, null);
-            _getter = _notifyingObject.GetType().GetMethod("GetValue");
-            _setter = _notifyingObject.GetType().GetMethod("SetValue");
+            _getter = _notifyingObject.GetType().GetMethod(GetValueMethodName);
+            _setter = _notifyingObject.GetType().GetMethod(SetValueMethodName);
 
             var displayNameAttribute = property.GetCustomAttributes(typeof(DisplayNameAttribute), false)
                 .Cast<DisplayNameAttribute>()
@@ -37,6 +42,14 @@ namespace Assets.Scripts.CooldownButtonTest
             _description = descriptionAttribute != null
                 ? descriptionAttribute.Description
                 : string.Empty;
+
+            var categoryAttribute = property.GetCustomAttributes(typeof(CategoryAttribute), false)
+                .Cast<CategoryAttribute>()
+                .SingleOrDefault();
+
+            _category = categoryAttribute != null
+                ? categoryAttribute.Category
+                : DefaultCategory;
 
             var propertyKindAttribut = property.GetCustomAttributes(typeof(PropertyKindAttribute), false)
                 .Cast<PropertyKindAttribute>()
@@ -57,9 +70,14 @@ namespace Assets.Scripts.CooldownButtonTest
             get { return _displayName; }
         }
 
-        public string description
+        public string Description
         {
             get { return _description; }
+        }
+
+        public string Category
+        {
+            get { return _category; }
         }
 
         public PropertyKind PropertyKind
