@@ -24,10 +24,29 @@ namespace Assets.Test.Scripts.Binding
         }
 
         [Test]
+        public void Ctor_ExecuteNullWithoutCanExecute_Throws()
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Assert.Throws<ArgumentNullException>(() => new DelegateCommand(null));
+        }
+
+        [Test]
         public void Execute_DelegateCalled()
         {
             var called = false;
             var subject = new DelegateCommand(() => { called = true; }, () => true);
+
+            subject.Execute();
+
+            Assert.IsTrue(called);
+        }
+
+        [Test]
+        public void Execute_WithoutCanExecute__DelegateCalled()
+        {
+            var called = false;
+            var subject = new DelegateCommand(() => { called = true; });
 
             subject.Execute();
 
