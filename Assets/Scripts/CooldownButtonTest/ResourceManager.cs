@@ -10,13 +10,11 @@ namespace Assets.Scripts.CooldownButtonTest
 {
     public class ResourceManager : MonoBehaviour, ISerializationCallbackReceiver
     {
-        [SerializeField] private Color _buttonEnabledColor;
-        [SerializeField] private Color _buttonDisabledColor;
-        [SerializeField] private Color _buttonEnabledTextColor;
-        [SerializeField] private Color _buttonDisabledTextColor;
-        [SerializeField] private Color _buttonEnabledProgressBarColor;
-        [SerializeField] private Color _buttonDisabledProgressBarColor;
-        [SerializeField] private CategoryFoldout[] _serializedCategoryFoldouts; 
+        [SerializeField] private CategoryFoldout[] _serializedCategoryFoldouts;
+        [SerializeField] private SerializedValue[] _serializedValues;
+
+        private List<CategoryProperties> _categoryProperties;
+        private Dictionary<string, bool> _categoryFoldouts;
 
         private readonly NotifyingObject<Color> _buttonEnabledColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonDisabledColorProperty = new NotifyingObject<Color>();
@@ -25,12 +23,9 @@ namespace Assets.Scripts.CooldownButtonTest
         private readonly NotifyingObject<Color> _buttonEnabledProgressBarColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonDisabledProgressBarColorProperty = new NotifyingObject<Color>();
 
-        private List<CategoryProperties> _categoryProperties;
-        private Dictionary<string, bool> _categoryFoldouts;
-
         public ResourceManager()
         {
-            FindProperties();
+            InitializeEditorData();
         }
 
         internal List<CategoryProperties> CategoryProperties
@@ -87,49 +82,66 @@ namespace Assets.Scripts.CooldownButtonTest
 
         public void OnBeforeSerialize()
         {
-            _buttonEnabledColor = ButtonEnabledColorProperty.GetValue();
-            _buttonDisabledColor = ButtonDisabledColorProperty.GetValue();
-            _buttonEnabledTextColor = ButtonEnabledTextColorProperty.GetValue();
-            _buttonDisabledTextColor = ButtonDisabledTextColorProperty.GetValue();
-            _buttonEnabledProgressBarColor = ButtonEnabledProgressBarColorProperty.GetValue();
-            _buttonDisabledProgressBarColor = ButtonDisabledProgressBarColorProperty.GetValue();
-
             _serializedCategoryFoldouts = _categoryFoldouts.Select(
                 categoryFoldout => new CategoryFoldout(categoryFoldout.Key, categoryFoldout.Value))
+                .ToArray();
+
+            _serializedValues = GetNotifyingObjectProperties()
+                .Where(property => property.Type.AssemblyQualifiedName != null)
+                .Select(property => new SerializedValue(
+                    property.PropertyName,
+                    property.Type,
+                    property.GetValue<object>()))
                 .ToArray();
         }
 
         public void OnAfterDeserialize()
         {
-            ButtonEnabledColorProperty.SetValue(_buttonEnabledColor);
-            ButtonDisabledColorProperty.SetValue(_buttonDisabledColor);
-            ButtonEnabledTextColorProperty.SetValue(_buttonEnabledTextColor);
-            ButtonDisabledTextColorProperty.SetValue(_buttonDisabledTextColor);
-            ButtonEnabledProgressBarColorProperty.SetValue(_buttonEnabledProgressBarColor);
-            ButtonDisabledProgressBarColorProperty.SetValue(_buttonDisabledProgressBarColor);
-
-            foreach (var categoryFoldout in _serializedCategoryFoldouts)
+            if (_serializedCategoryFoldouts != null)
             {
-                if (_categoryFoldouts.ContainsKey(categoryFoldout.Name))
+                foreach (var categoryFoldout in _serializedCategoryFoldouts)
                 {
-                    _categoryFoldouts[categoryFoldout.Name] = categoryFoldout.Foldout;
+                    if (_categoryFoldouts.ContainsKey(categoryFoldout.Name))
+                    {
+                        _categoryFoldouts[categoryFoldout.Name] = categoryFoldout.Foldout;
+                    }
+                }
+            }
+
+            if (_serializedValues != null)
+            {
+                var properties = GetNotifyingObjectProperties().ToList();
+                foreach (var serializedValue in _serializedValues)
+                {
+                    var property = properties.FirstOrDefault(
+                        propertyInfo => propertyInfo.PropertyName == serializedValue.Name);
+                    if (property != null && property.Type.AssemblyQualifiedName == serializedValue.AssemblyQualifiedName)
+                    {
+                        var value = serializedValue.Deserialize();
+                        property.SetValue(value);
+                    }
                 }
             }
         }
 
-        private void FindProperties()
+        private IEnumerable<NotifyingObjectProperty> GetNotifyingObjectProperties()
         {
-            _categoryProperties = typeof(ResourceManager).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            return GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(IsNotifyingObject)
                 .Select(property => new NotifyingObjectProperty(property, this))
-                .Where(IsSupported)
+                .Where(IsSupported);
+        }
+
+        private void InitializeEditorData()
+        {
+            _categoryProperties = GetNotifyingObjectProperties()
                 .OrderBy(property => property.DisplayName)
                 .GroupBy(property => property.Category)
                 .Select(group => new CategoryProperties(group.Key, group.ToArray()))
                 .OrderBy(group => group.Category)
                 .ToList();
 
-            _categoryFoldouts = _categoryProperties.ToDictionary(group => group.Category, category => false);
+            _categoryFoldouts = _categoryProperties.ToDictionary(group => group.Category, category => true);
         }
 
         private static bool IsNotifyingObject(PropertyInfo property)

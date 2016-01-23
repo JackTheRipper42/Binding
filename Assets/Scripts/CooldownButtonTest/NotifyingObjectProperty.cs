@@ -18,6 +18,7 @@ namespace Assets.Scripts.CooldownButtonTest
         private readonly string _displayName;
         private readonly string _description;
         private readonly string _category;
+        private readonly string _propertyName;
         private readonly PropertyKind _propertyKind;
 
         public NotifyingObjectProperty(PropertyInfo property, object obj)
@@ -51,6 +52,8 @@ namespace Assets.Scripts.CooldownButtonTest
                 ? categoryAttribute.Category
                 : DefaultCategory;
 
+            _propertyName = property.Name;
+
             var propertyKindAttribut = property.GetCustomAttributes(typeof(PropertyKindAttribute), false)
                 .Cast<PropertyKindAttribute>()
                 .SingleOrDefault();
@@ -78,6 +81,11 @@ namespace Assets.Scripts.CooldownButtonTest
         public string Category
         {
             get { return _category; }
+        }
+
+        public string PropertyName
+        {
+            get { return _propertyName; }
         }
 
         public PropertyKind PropertyKind
