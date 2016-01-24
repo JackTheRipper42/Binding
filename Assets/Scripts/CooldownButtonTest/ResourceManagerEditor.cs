@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -98,7 +99,13 @@ namespace Assets.Scripts.CooldownButtonTest
                                 }
                                 else if (propertyType.IsEnum)
                                 {
-                                    property.SetValue(EditorGUILayout.EnumMaskField(property.GetValue<Enum>()));
+                                    var flagsAttribute = propertyType.GetCustomAttributes(typeof(FlagsAttribute), false)
+                                        .Cast<FlagsAttribute>()
+                                        .FirstOrDefault();
+
+                                    property.SetValue(flagsAttribute != null
+                                        ? EditorGUILayout.EnumMaskField(property.GetValue<Enum>())
+                                        : EditorGUILayout.EnumPopup(property.GetValue<Enum>()));
                                 }
                                 else if (typeof(UnityEngine.Object).IsAssignableFrom(propertyType))
                                 {
