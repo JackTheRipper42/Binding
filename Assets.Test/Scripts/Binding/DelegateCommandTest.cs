@@ -72,6 +72,16 @@ namespace Assets.Test.Scripts.Binding
         }
 
         [Test]
+        public void CanExectue_WithoutCanExecute_True()
+        {
+            var subject = new DelegateCommand(() => { });
+
+            var result = subject.CanExecute();
+
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
         public void RaiseCanExecuteChanged_NoHandler_DoesNotThrow()
         {
             var subject = new DelegateCommand(() => { }, () => true);

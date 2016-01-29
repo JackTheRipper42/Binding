@@ -66,6 +66,12 @@
     <Compile Include="Assets.Test\Scripts\Binding\PropertyBindingTest.cs" />
     <Compile Include="Assets.Test\Scripts\Binding\PropertyChangedEventArgsTest.cs" />
     <Compile Include="Assets.Test\Scripts\Binding\UnityValueConverterTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\Internal\ContentTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\Internal\FormatterTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\Internal\BinarySerializerTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\Internal\FormatSelectorTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\Internal\SerializedValueTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\SerializationInfoTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
