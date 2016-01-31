@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     public sealed class BinarySerializer : IBinarySerializer
     {

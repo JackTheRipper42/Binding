@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     public interface IBinarySerializer
     {

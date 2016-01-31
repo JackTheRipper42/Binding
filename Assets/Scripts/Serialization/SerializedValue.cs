@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     [Serializable]
     public class SerializedValue

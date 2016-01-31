@@ -1,8 +1,10 @@
-﻿using Assets.Scripts.Binding;
+﻿using System;
+using Assets.Scripts.Binding;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Assets.Scripts.Serialization;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,7 +13,7 @@ namespace Assets.Scripts.CooldownButtonTest
     public class ResourceManager : MonoBehaviour, ISerializationCallbackReceiver
     {
         [SerializeField] private CategoryFoldout[] _serializedCategoryFoldouts;
-        [SerializeField] private SerializedValue[] _serializedValues;
+        [SerializeField] private SerializedMember[] _serializedValues;
 
         private List<CategoryProperties> _categoryProperties;
         private Dictionary<string, bool> _categoryFoldouts;
@@ -22,6 +24,8 @@ namespace Assets.Scripts.CooldownButtonTest
         private readonly NotifyingObject<Color> _buttonDisabledTextColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonEnabledProgressBarColorProperty = new NotifyingObject<Color>();
         private readonly NotifyingObject<Color> _buttonDisabledProgressBarColorProperty = new NotifyingObject<Color>();       
+
+        private readonly IFormatter _formatter = new Formatter();
 
         public ResourceManager()
         {
@@ -88,10 +92,10 @@ namespace Assets.Scripts.CooldownButtonTest
 
             _serializedValues = GetNotifyingObjectProperties()
                 .Where(property => property.Type.AssemblyQualifiedName != null)
-                .Select(property => new SerializedValue(
+                .Select(property => new SerializedMember(
                     property.PropertyName,
-                    property.Type,
-                    property.GetValue<object>()))
+                    MemberType.Property,
+                    _formatter.Serialize(property.Type, property.GetValue<object>())))
                 .ToArray();
         }
 
@@ -111,14 +115,18 @@ namespace Assets.Scripts.CooldownButtonTest
             if (_serializedValues != null)
             {
                 var properties = GetNotifyingObjectProperties().ToList();
-                foreach (var serializedValue in _serializedValues)
+                foreach (var serializedMember in _serializedValues.Where(member => member.MemberType == MemberType.Property))
                 {
                     var property = properties.FirstOrDefault(
-                        propertyInfo => propertyInfo.PropertyName == serializedValue.Name);
-                    if (property != null && property.Type.AssemblyQualifiedName == serializedValue.AssemblyQualifiedName)
+                        propertyInfo => propertyInfo.PropertyName == serializedMember.Name);
+                    if (property != null)
                     {
-                        var value = serializedValue.Deserialize();
-                        property.SetValue(value);
+                        var type = Type.GetType(serializedMember.SerializedValue.AssemblyQualifiedName, false);
+                        if (type == property.Type)
+                        {
+                            var value = _formatter.Deserialize(serializedMember.SerializedValue);
+                            property.SetValue(value);
+                        }
                     }
                 }
             }

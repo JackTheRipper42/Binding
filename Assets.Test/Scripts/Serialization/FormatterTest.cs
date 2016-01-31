@@ -2,11 +2,10 @@
 using System.Globalization;
 using System.Reflection;
 using Assets.Scripts.Serialization;
-using Assets.Scripts.Serialization.Internal;
 using Moq;
 using NUnit.Framework;
 
-namespace Assets.Test.Scripts.Serialization.Internal
+namespace Assets.Test.Scripts.Serialization
 {
     [TestFixture]
     internal class FormatterTest

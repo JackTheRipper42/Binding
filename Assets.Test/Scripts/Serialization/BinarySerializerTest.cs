@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Serialization.Internal;
+﻿using System;
+using Assets.Scripts.Serialization;
 using NUnit.Framework;
-using System;
 
-namespace Assets.Test.Scripts.Serialization.Internal
+namespace Assets.Test.Scripts.Serialization
 {
     [TestFixture]
     internal class BinarySerializerTest

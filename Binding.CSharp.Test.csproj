@@ -66,12 +66,11 @@
     <Compile Include="Assets.Test\Scripts\Binding\PropertyBindingTest.cs" />
     <Compile Include="Assets.Test\Scripts\Binding\PropertyChangedEventArgsTest.cs" />
     <Compile Include="Assets.Test\Scripts\Binding\UnityValueConverterTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\Internal\ContentTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\Internal\FormatterTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\Internal\BinarySerializerTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\Internal\FormatSelectorTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\Internal\SerializedValueTest.cs" />
-    <Compile Include="Assets.Test\Scripts\Serialization\SerializationInfoTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\FormatterTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\BinarySerializerTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\FormatSelectorTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\SerializedMemberTest.cs" />
+    <Compile Include="Assets.Test\Scripts\Serialization\SerializedValueTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -81,6 +80,9 @@
       <Project>{ae0c8c52-d6ea-72fd-58b0-f7dba0180e18}</Project>
       <Name>Binding.CSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

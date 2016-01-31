@@ -1,9 +1,8 @@
 ﻿using System;
 using Assets.Scripts.Serialization;
-using Assets.Scripts.Serialization.Internal;
 using NUnit.Framework;
 
-namespace Assets.Test.Scripts.Serialization.Internal
+namespace Assets.Test.Scripts.Serialization
 {
     [TestFixture]
     internal class SerializedValueTest

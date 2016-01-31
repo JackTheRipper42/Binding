@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
+using JetBrains.Annotations;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     public class Formatter : IFormatter
     {

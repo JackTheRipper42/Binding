@@ -1,12 +1,11 @@
-﻿using Assets.Scripts.Serialization;
-using Assets.Scripts.Serialization.Internal;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Serialization;
+using NUnit.Framework;
 using UnityEngine;
 
-namespace Assets.Test.Scripts.Serialization.Internal
+namespace Assets.Test.Scripts.Serialization
 {
     [TestFixture]
     internal class FormatSelectorTest

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     public class UnityJsonSerializer : IUnityJsonSerializer
     {

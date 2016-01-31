@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Serialization.Internal
+namespace Assets.Scripts.Serialization
 {
     public class FormatSelector : IFormatSelector
     {
