@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CooldownButtonTest
+namespace Assets.Scripts.Binding
 {
     public enum PropertyKind
     {

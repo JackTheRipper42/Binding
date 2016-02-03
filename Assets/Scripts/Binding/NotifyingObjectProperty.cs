@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Assets.Scripts.CooldownButtonTest
+namespace Assets.Scripts.Binding
 {
     public class NotifyingObjectProperty
     {

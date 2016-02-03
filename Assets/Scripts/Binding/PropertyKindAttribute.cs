@@ -1,6 +1,6 @@
 using System;
 
-namespace Assets.Scripts.CooldownButtonTest
+namespace Assets.Scripts.Binding
 {
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class PropertyKindAttribute : Attribute

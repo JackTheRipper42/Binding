@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.CooldownButtonTest
+namespace Assets.Scripts.Binding
 {
     [Serializable]
     public struct CategoryFoldout

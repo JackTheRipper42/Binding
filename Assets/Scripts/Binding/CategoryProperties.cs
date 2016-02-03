@@ -1,8 +1,8 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
-namespace Assets.Scripts.CooldownButtonTest
+namespace Assets.Scripts.Binding
 {
     public class CategoryProperties
     {
